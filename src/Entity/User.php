@@ -74,14 +74,6 @@ class User implements UserInterface
     {
         return $this->pets;
     }
-    public function getRole()
-    {
-        return $this->role;
-    }
-    public function setRole($role)
-    {
-        $this->role = $role;
-    }
     public function getUsername()
     {
         return $this->username;
@@ -110,6 +102,15 @@ class User implements UserInterface
     {
         $this->password = $password;
     }
+    public function getRole()
+    {
+        return $this->role;
+    }
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
 
     /**
      * Returns the roles granted to the user.
@@ -127,7 +128,6 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        // TODO: Implement getRoles() method.
     }
 
     /**
@@ -140,7 +140,7 @@ class User implements UserInterface
      */
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
     }
 
     /**

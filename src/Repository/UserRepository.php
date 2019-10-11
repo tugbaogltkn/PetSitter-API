@@ -64,11 +64,11 @@ class UserRepository extends ServiceEntityRepository
 
         $user->setUsername($parametersArray['username']);
         $user->setEmail($parametersArray['email']);
-        $user->setRole($parametersArray['role']);
         $user->setName($parametersArray['name']);
+        $user->setRole($parametersArray['role']);
 
         $encoder = $this->encoderFactory->getEncoder($user);
-        $password = $encoder->encodePassword($user->getPassword(), $user->getSalt());
+        $password = $encoder->encodePassword($parametersArray['password'], null);
 
         $user->setPassword($password);
 

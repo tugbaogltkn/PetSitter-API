@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
@@ -42,7 +43,7 @@ class UserService
             $passwordValid = $encoder->isPasswordValid(
                 $user->getPassword(),
                 $password,
-                $user->getSalt()
+                null
             );
 
             if (!$passwordValid) {
@@ -50,6 +51,7 @@ class UserService
             }
 
         }
+        return $user;
     }
 
     public function new(array $parametersArray) {
@@ -63,4 +65,19 @@ class UserService
         ];
 
     }
+
+    public function sitterList()
+    {
+        $sitters = $this->userRepository->findBy(array('role' => 'sitter'));
+        $sitterList = [];
+        foreach ($sitters as $sitter) {
+            $name = $sitter->getName();
+            $username = $sitter->getUsername();
+            $district = $sitter->getDistrict();
+            array_push($sitterList, $name, $username, $district);
+        }
+
+        return $sitterList;
+    }
+
 }
