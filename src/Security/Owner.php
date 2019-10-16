@@ -4,23 +4,19 @@
 namespace App\Security;
 
 
-class User
+class Owner
 {
     private $id;
     private $username;
     private $email;
     private $name;
-    private $role;
-    private $district;
 
     /**
      * User constructor.
      */
     public function __construct()
     {
-        $this->district = [];
         $this->name = [];
-        $this->role = [];
     }
 
     /**
@@ -30,7 +26,6 @@ class User
     {
         return get_object_vars($this);
     }
-
     /**
      * @return int
      */
@@ -41,7 +36,7 @@ class User
 
     /**
      * @param int $id
-     * @return User
+     * @return Owner
      */
     public function setId($id)
     {
@@ -59,7 +54,7 @@ class User
 
     /**
      * @param string $username
-     * @return User
+     * @return Owner
      */
     public function setUsername($username)
     {
@@ -77,7 +72,7 @@ class User
 
     /**
      * @param string $email
-     * @return User
+     * @return Owner
      */
     public function setEmail($email)
     {
@@ -96,7 +91,7 @@ class User
 
     /**
      * @param array $role
-     * @return User
+     * @return Owner
      */
     public function setRole($role)
     {
@@ -135,5 +130,4 @@ class User
     {
         $this->district = $district;
     }
-
 }
