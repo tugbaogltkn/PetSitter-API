@@ -5,19 +5,13 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Security\AccessToken;
-use App\Security\User as TokenUser;
-
-
+use App\Security\Owner as TokenUser;
 
 class AccessTokenService
 {
-
+    /** @var UserService $userService */
     private $userService;
 
-    /**
-     * Service constructor.
-     * @param $userService
-     */
     public function __construct(UserService $userService)
     {
         $this->userService = $userService;
@@ -36,7 +30,7 @@ class AccessTokenService
 
     public function createAccessTokenForUser(User $user)
     {
-        $tokenUser =new TokenUser();
+        $tokenUser = new TokenUser();
         $tokenUser
             ->setId($user->getId())
             ->setUsername($user->getUsername())

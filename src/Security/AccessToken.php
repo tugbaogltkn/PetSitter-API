@@ -4,6 +4,8 @@
 namespace App\Security;
 
 
+use App\Entity\User;
+
 class AccessToken
 {
 

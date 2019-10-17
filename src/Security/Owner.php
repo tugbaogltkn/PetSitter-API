@@ -80,25 +80,6 @@ class Owner
         return $this;
     }
 
-
-    /**
-     * @return array
-     */
-    public function getRole()
-    {
-        return $this->role;
-    }
-
-    /**
-     * @param array $role
-     * @return Owner
-     */
-    public function setRole($role)
-    {
-        $this->role = $role;
-        return $this;
-    }
-
     /**
      * @return array
      */
@@ -115,19 +96,4 @@ class Owner
         $this->name = $name;
     }
 
-    /**
-     * @return array
-     */
-    public function getDistrict(): array
-    {
-        return $this->district;
-    }
-
-    /**
-     * @param array $district
-     */
-    public function setDistrict(array $district)
-    {
-        $this->district = $district;
-    }
 }

@@ -7,11 +7,9 @@ namespace App\Controller\Pet;
 use App\Service\PetService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateAction extends AbstractController
+class DeleteAction extends AbstractController
 {
     /** @var PetService $petService */
     private $petService;
@@ -22,16 +20,15 @@ class CreateAction extends AbstractController
     }
 
     /**
-     * @Route("/pet/new", name="pet_user", methods={"POST"})
-     * @param Request $request
+     * @Route("/pet/delete/{id}", name="pet_delete", methods={"DELETE"})
+     * @param $id
      * @return JsonResponse
      */
-    public function new(Request $request)
+    public function deletePet($id)
     {
-        $item = json_decode($request->getContent(),true);
+        $this->petService->deletePet($id);
 
-        return new JsonResponse($this->petService->new($item), Response::HTTP_CREATED);
+        return new JsonResponse(null, 204);
     }
-
 
 }
