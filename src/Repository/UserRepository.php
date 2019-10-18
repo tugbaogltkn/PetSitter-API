@@ -6,6 +6,8 @@ use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,8 +17,14 @@ use Doctrine\ORM\Query;
  */
 class UserRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @var EncoderFactoryInterface
+     */
+    private $encoderFactory;
+
+    public function __construct(ManagerRegistry $registry, EncoderFactoryInterface $encoderFactory)
     {
+        $this->encoderFactory = $encoderFactory;
         parent::__construct($registry, User::class);
     }
 
@@ -67,5 +75,62 @@ class UserRepository extends ServiceEntityRepository
             ])
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function insert(array $parametersArray)
+    {
+        $em = $this->getEntityManager();
+
+        $user = new User();
+
+        $user->setUsername($parametersArray['username']);
+        $user->setEmail($parametersArray['email']);
+        $user->setType($parametersArray['type']);
+
+
+        $encoder = $this->encoderFactory->getEncoder($user);
+        $password = $encoder->encodePassword($parametersArray['password'], null);
+
+        $user->setPassword($password);
+
+        $em->persist($user);
+
+        $em->flush();
+
+        return $user;
+    }
+
+    public function deleteUser($id)
+    {
+        $em = $this->getEntityManager();
+
+        if(!$id)
+        {
+            throw new NotFoundHttpException('You must enter id');
+        }
+
+        $user = $this->find($id);
+
+        if(!$user)
+        {
+            throw new NotFoundHttpException('No owner found with this id');
+        }
+
+        if($user != null)
+        {
+            $em->remove($user);
+            $em->flush();
+        }
+    }
+
+    public function update($updatedUser)
+    {
+        $em = $this->getEntityManager();
+
+        $em->persist($updatedUser);
+
+        $em->flush();
+
+        return $updatedUser;
     }
 }

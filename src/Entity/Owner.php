@@ -12,17 +12,25 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class Owner implements UserInterface
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id()
      * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
      */
     private $id;
-
 
     /**
      * @ORM\OneToMany(targetEntity="Pets", mappedBy="owner")
      */
     private $pets;
+
+    /**
+     * @var integer
+     * @ORM\OneToOne(targetEntity="User", inversedBy="owner")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+     **/
+    private $user;
 
     /**
      * @ORM\Column()type="text")
@@ -48,6 +56,7 @@ class Owner implements UserInterface
      * @ORM\Column()type="text")
      */
     private $password;
+
 
     /**
      * @ORM\Column()type="text")
@@ -205,6 +214,21 @@ class Owner implements UserInterface
         return $this->isVerified;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user): void
+    {
+        $this->user = $user;
+    }
 
     /**
      * Returns the roles granted to the user.

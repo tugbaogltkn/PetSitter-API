@@ -24,7 +24,8 @@ class AccessTokenService
         $accessToken = $this->createAccessTokenForUser($user);
 
         return [
-            'id' => $accessToken->getId()
+            'id' => $accessToken->getId(),
+            'userId' => $accessToken->getUser()
         ];
     }
 

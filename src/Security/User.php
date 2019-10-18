@@ -4,8 +4,9 @@
 namespace App\Security;
 
 
-class Owner
+class User
 {
+
     private $id;
     private $username;
     private $email;
@@ -36,7 +37,7 @@ class Owner
 
     /**
      * @param int $id
-     * @return Owner
+     * @return User
      */
     public function setId($id)
     {
@@ -54,7 +55,7 @@ class Owner
 
     /**
      * @param string $username
-     * @return Owner
+     * @return User
      */
     public function setUsername($username)
     {
@@ -72,7 +73,7 @@ class Owner
 
     /**
      * @param string $email
-     * @return Owner
+     * @return User
      */
     public function setEmail($email)
     {

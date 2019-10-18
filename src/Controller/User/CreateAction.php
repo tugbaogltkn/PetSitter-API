@@ -1,10 +1,10 @@
 <?php
 
 
-namespace App\Controller\Owner;
+namespace App\Controller\User;
 
 
-use App\Service\OwnerService;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,16 +13,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateAction extends AbstractController
 {
-    /** @var OwnerService $ownerService */
-    private $ownerService;
+    /** @var UserService $userService */
+    private $userService;
 
-    public function __construct(OwnerService $ownerService)
+    public function __construct(UserService $userService)
     {
-        $this->ownerService = $ownerService;
+        $this->userService = $userService;
     }
 
     /**
-     * @Route("/owner/new", name="new_owner", methods={"POST"})
+     * @Route("/user", name="new_user", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -30,6 +30,6 @@ class CreateAction extends AbstractController
     {
         $item = json_decode($request->getContent(),true);
 
-        return new JsonResponse($this->ownerService->new($item), Response::HTTP_CREATED);
+        return new JsonResponse($this->userService->newUser($item), Response::HTTP_CREATED);
     }
 }

@@ -29,7 +29,7 @@ class Pets
     /**
      * @ORM\Column(type="integer")
      * @ORM\ManyToOne(targetEntity="Owner", inversedBy="pets")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", nullable=false)
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $owner;
 
