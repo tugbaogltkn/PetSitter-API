@@ -4,6 +4,8 @@
 namespace App\Service;
 
 use App\Entity\User;
+use App\Repository\OwnerRepository;
+use App\Repository\SitterRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Query;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
@@ -16,13 +18,23 @@ class UserService
      */
     private $userRepository;
 
+    /** @var OwnerRepository $ownerRepository */
+    private $ownerRepository;
+
+    /** @var SitterRepository $sitterRepository */
+    private $sitterRepository;
+
     /**
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
 
-    public function __construct(UserRepository $userRepository, EncoderFactoryInterface $encoderFactory)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        EncoderFactoryInterface $encoderFactory,
+        OwnerRepository $ownerRepository,
+        SitterRepository $sitterRepository
+    ) {
         $this->encoderFactory = $encoderFactory;
         $this->userRepository = $userRepository;
     }
@@ -60,9 +72,9 @@ class UserService
         return $user;
     }
 
-    public function newUser(array $parametersArray) {
+    public function newUser(User $user) {
 
-        $user = $this->userRepository->insert($parametersArray);
+        $user = $this->userRepository->insert($user);
 
         return [
             'id' => $user->getId(),

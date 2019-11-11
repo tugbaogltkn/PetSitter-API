@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -55,6 +58,51 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity="Sitter", mappedBy="user", cascade={"persist"})
      */
     private $sitter;
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint('username', new NotBlank());
+        $metadata->addPropertyConstraint(
+            'username',
+            new Assert\Length(["min" => 3])
+        );
+        $metadata->addPropertyConstraint('email', new Assert\Email([
+            'message' => 'The email "{{ value }}" is not a valid email.',
+            'checkMX' => true,
+        ]));
+        $metadata->addPropertyConstraint('password', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('password', new Assert\Length([
+            'min' => 6,
+            'max' => 16
+        ]));
+        $metadata->addPropertyConstraint('password', new Assert\Regex([
+            'pattern' => '#.*^(?=.{6,16})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#',
+            'message' => 'Password must include at least 1 uppercase, 1 lowercase, and 1 number'
+        ]));
+        $metadata->addPropertyConstraint('type', new Assert\NotBlank());
+        $metadata->addPropertyConstraint('type', new Assert\NotNull());
+        $metadata->addPropertyConstraint('type', new Assert\Choice([
+            'choices' => ['sitter', 'owner'],
+            'message' => 'Choose a valid type.'
+        ]));
+        if ('type' == 'sitter') {
+            $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('phone', new Assert\NotNull());
+            $metadata->addPropertyConstraint('phone', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('postCode', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('postCode', new Assert\NotNull());
+            $metadata->addPropertyConstraint('postCode', new Assert\Range(['01000', '81000']));
+        }
+
+        if ('type' == 'owner') {
+            $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('phone', new Assert\NotNull());
+            $metadata->addPropertyConstraint('phone', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('postCode', new Assert\NotBlank());
+            $metadata->addPropertyConstraint('postCode', new Assert\NotNull());
+            $metadata->addPropertyConstraint('postCode', new Assert\Range(['01000', '81000']));
+        }
+    }
 
     public function getId(): ?int
     {

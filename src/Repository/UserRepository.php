@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -21,6 +22,9 @@ class UserRepository extends ServiceEntityRepository
      * @var EncoderFactoryInterface
      */
     private $encoderFactory;
+
+    /** ValidatorInterface $validator */
+    private $validator;
 
     public function __construct(ManagerRegistry $registry, EncoderFactoryInterface $encoderFactory)
     {
@@ -77,19 +81,12 @@ class UserRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function insert(array $parametersArray)
+    public function insert(User $user)
     {
         $em = $this->getEntityManager();
 
-        $user = new User();
-
-        $user->setUsername($parametersArray['username']);
-        $user->setEmail($parametersArray['email']);
-        $user->setType($parametersArray['type']);
-
-
         $encoder = $this->encoderFactory->getEncoder($user);
-        $password = $encoder->encodePassword($parametersArray['password'], null);
+        $password = $encoder->encodePassword($user->getPassword(), null);
 
         $user->setPassword($password);
 
